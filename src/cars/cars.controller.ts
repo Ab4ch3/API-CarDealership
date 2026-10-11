@@ -1,9 +1,47 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { CarsService } from './cars.service.js';
 
 @Controller('cars')
 export class CarsController {
+  /**
+   * inyeccion de dependecia
+   */
+  constructor(private readonly carsService: CarsService) {}
+
   @Get()
   getAllCars() {
-    return ['Toyota', 'Honda', 'Jeep'];
+    return this.carsService.findAll();
+  }
+
+  @Get(':id')
+  getCarById(@Param('id', ParseIntPipe) id: number) {
+    return this.carsService.findOneById(id);
+  }
+
+  @Post()
+  create(@Body() body: any) {
+    return body;
+  }
+
+  @Patch(':id')
+  updateCar(@Body() body: any) {
+    return body;
+  }
+
+  @Delete(':id')
+  deleteCar(@Param('id', ParseIntPipe) id: number) {
+    return {
+      id,
+      method: 'Delete',
+    };
   }
 }
